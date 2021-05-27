@@ -6,15 +6,15 @@ const passport =require('passport');
 const mongoose= require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./config/database');
+
+
 // 익스프레스 객체 생성
 const app= express();
 //라우팅
 const users =require('./routes/users')
-
+const employees = require('./routes/employees')
 //cors
-
 app.use(cors());
-
 //static파일을 저장할 폴더 지정
 app.use(express.static(path.join(__dirname,'public')));
 
@@ -28,6 +28,7 @@ require('./config/passport')(passport);
 
 //users 경로 등록
 app.use('/users',users);
+app.use("/employees", employees);
 const port =3000;
 
 //mongoDB 연결부
@@ -38,14 +39,6 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', (err)=>{
     console.log('Database error: '+err);
   });
-
-//웹서비스의 루트 경로에 대한 응답
-app.get('/', (req,res)=>{
-    res.send('서비스 준비중');
-});
-
-
-
 
 //서버 시작
 app.listen(port, function(){

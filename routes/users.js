@@ -12,19 +12,19 @@ router.post('/register', (req, res, next) => {
             email: req.body.email,
             username: req.body.username,
             password: req.body.password,
-            age: req.body.age
+            birth: req.body.age
     });
   
      User.getUserByUsername(newUser.username, (err, user) => {
             if (err) throw err;
             if (user) {
-              return res.json({ success: false, msg: "동일한 아이디가 존재합니다. 회원 가입 실패." });
+          return res.json({ success: false, msg: '동일한 아이디가 존재합니다. 다른 아이디를 사용해주세요.' });
             } else {
               User.addUser(newUser, (err, user) => {
                 if (err) {
-                  res.json({ success: false, msg: '회원가입 실패' });
+          res.json({ success: false, msg: '이미 가입한 이메일입니다.' });
                 } else {
-                  res.json({ success: true, msg: '회원가입 성공' });
+          res.json({ success: true, msg: '회원가입 되었습니다. 로그인 하세요!' });
                 }
               });
             }
@@ -73,7 +73,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (
           name: req.user.name,
           username: req.user.username,
           email: req.user.email,
-          age: req.user.age
+          birth: req.user.age
         }
       });
     });
@@ -88,4 +88,41 @@ router.get('/list', (req, res, next) => {
         res.json(users);
       });
     });
+    router.get("/test", async (req, res) => {
+      const employee = await User.find();
+      res.json(employee);
+    });
+    
+    router.get("/:id", async (req, res) => {
+      const employee = await User.findById(req.params.id);
+      res.json(employee);
+    });
+    
+    router.post("/test", async (req, res) => {
+      const employee = new User(req.body);
+      await employee.save();
+      res.json(employee);
+    });
+    
+    router.put("/:id", async (req, res) => {
+      await User.findByIdAndUpdate(req.params.id, req.body, { useFindAndModify: false });
+      res.json({
+        message: "ok",
+      });
+    });
+    
+    router.delete("/remove", async (req, res) => {
+      await User.deleteMany();
+      res.json({
+        message: "ok",
+      });
+    });
+    
+    router.delete("/test/:id", async (req, res) => {
+      await User.findByIdAndDelete(req.params.id);
+      res.json({
+        message: "ok",
+      });
+    });
+    
 module.exports = router;
