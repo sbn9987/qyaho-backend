@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from "../../models/User"
-import { EmployeesService } from "../../services/employees.service";
+import { CustomersService } from "../../services/customers.service";
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from "@angular/forms";
 import Swal from "sweetalert2";
 
@@ -11,93 +11,93 @@ import Swal from "sweetalert2";
 })
 export class CustomerListComponent implements OnInit {
 
-  employees: User[] = [];
-  employeeForm: FormGroup;
-  selectedEmployee: User = new User();
-  employeesQuantity: number = 0;
+  customers: User[] = [];
+  customerForm: FormGroup;
+  selectedCustomer: User = new User();
+  customersQuantity: number = 0;
 
-  constructor(private employesService: EmployeesService, private _builder: FormBuilder) {
-    this.employesService.getEmployees().subscribe((data) => {
-      this.employees = data;
-      this.employeesQuantity = data.length;
+  constructor(private customer1Service: CustomersService, private _builder: FormBuilder) {
+    this.customer1Service.getCustomers().subscribe((data) => {
+      this.customers = data;
+      this.customersQuantity = data.length;
     });
 
-    this.employeeForm = this._builder.group({
-      first_name: ["", Validators.required],
-      last_name: ["", Validators.required],
-      email: ["", Validators.compose([Validators.required, Validators.email])],
-      avatar: ["", Validators.required],
-    });
+    // this.employeeForm = this._builder.group({
+    //   first_name: ["", Validators.required],
+    //   last_name: ["", Validators.required],
+    //   email: ["", Validators.compose([Validators.required, Validators.email])],
+    //   avatar: ["", Validators.required],
+    // });
   }
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
   }
 
   _blankControls() {
-    this.employeeForm.get("name").reset();
-    this.employeeForm.get("email").reset();
-    this.employeeForm.get("username").reset();
-    this.employeeForm.get("password").reset();
-    this.employeeForm.get("birth").reset();
+    this.customerForm.get("name").reset();
+    this.customerForm.get("email").reset();
+    this.customerForm.get("username").reset();
+    this.customerForm.get("password").reset();
+    this.customerForm.get("birth").reset();
   }
 
   manageSubmit(values: User) {
-    if (this.selectedEmployee._id === undefined) {
-      this.employesService.addEmployee(values).subscribe((data) => {
-        return this.employees.push(data);
+    if (this.selectedCustomer._id === undefined) {
+      this.customer1Service.addCustomer(values).subscribe((data) => {
+        return this.customers.push(data);
       });
-      this.employeesQuantity = this.employeesQuantity + 1;
+      this.customersQuantity = this.customersQuantity + 1;
       Swal.fire({
         title: "예약 성공! ",
         icon: "success",
         confirmButtonText: "Cool",
       });
     } else {
-      this.employesService.editEmployee(this.selectedEmployee._id, values);
+      this.customer1Service.editCustomer(this.selectedCustomer._id, values);
 
-      const index = this.employees.findIndex(
-        (user) => user._id === this.selectedEmployee._id
+      const index = this.customers.findIndex(
+        (user) => user._id === this.selectedCustomer._id
       );
-      this.employees[index].name = this.employeeForm.get("first_name").value;
-      this.employees[index].email = this.employeeForm.get("last_name").value;
-      this.employees[index].username = this.employeeForm.get("email").value;
-      this.employees[index].password = this.employeeForm.get("avatar").value;
-      this.employees[index].birth = this.employeeForm.get("avatar").value;
+      this.customers[index].name = this.customerForm.get("first_name").value;
+      this.customers[index].email = this.customerForm.get("last_name").value;
+      this.customers[index].username = this.customerForm.get("email").value;
+      this.customers[index].password = this.customerForm.get("avatar").value;
+      this.customers[index].birth = this.customerForm.get("avatar").value;
       Swal.fire({
         title: "예약이 수정되었습니다!",
         icon: "success",
         confirmButtonText: "Cool",
       });
     }
-    this.selectedEmployee = new User();
+    this.selectedCustomer = new User();
     this._blankControls();
   }
   // 수정, 삭제
-  deleteEmployee(id: string) {
-     Swal.fire({
-     title: "Delete the employee?",
-     text: "You won't be able to revert this!",
-       icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-     cancelButtonColor: "#3085d6",
-       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-       if (result.value) {
-      this.employesService.deleteEmployee(id);
-      this.employees = this.employees.filter((employee) => employee._id !== id);
-      this.employeesQuantity = this.employeesQuantity - 1;
-       Swal.fire("Deleted!", "The employee has been deleted.", "success");
-     }
-  });
-  }
+  // deleteEmployee(id: string) {
+  //    Swal.fire({
+  //    title: "Delete the employee?",
+  //    text: "You won't be able to revert this!",
+  //      icon: "warning",
+  //   showCancelButton: true,
+  //   confirmButtonColor: "#d33",
+  //    cancelButtonColor: "#3085d6",
+  //      confirmButtonText: "Yes, delete it!",
+  //   }).then((result) => {
+  //      if (result.value) {
+  //     this.employesService.deleteEmployee(id);
+  //     this.employees = this.employees.filter((employee) => employee._id !== id);
+  //     this.employeesQuantity = this.employeesQuantity - 1;
+  //      Swal.fire("Deleted!", "The employee has been deleted.", "success");
+  //    }
+  // });
+  // }
 
    editEmployee(employee: User) {
-    this.selectedEmployee = employee;
-    this.employeeForm.get("first_name").setValue(this.selectedEmployee.name);
-     this.employeeForm.get("last_name").setValue(this.selectedEmployee.email);
-     this.employeeForm.get("email").setValue(this.selectedEmployee.username);
-     this.employeeForm.get("avatar").setValue(this.selectedEmployee.password);
-    this.employeeForm.get("avatar").setValue(this.selectedEmployee.birth);
+    this.selectedCustomer = employee;
+    this.customerForm.get("first_name").setValue(this.selectedCustomer.name);
+     this.customerForm.get("last_name").setValue(this.selectedCustomer.email);
+     this.customerForm.get("email").setValue(this.selectedCustomer.username);
+     this.customerForm.get("avatar").setValue(this.selectedCustomer.password);
+    this.customerForm.get("avatar").setValue(this.selectedCustomer.birth);
    }
 }

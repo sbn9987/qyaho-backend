@@ -89,19 +89,19 @@ router.get('/list', (req, res, next) => {
       });
     });
     router.get("/test", async (req, res) => {
-      const employee = await User.find();
-      res.json(employee);
+      const customer = await User.find();
+      res.json(customer);
     });
     
     router.get("/:id", async (req, res) => {
-      const employee = await User.findById(req.params.id);
-      res.json(employee);
+      const customer = await User.findById(req.params.id);
+      res.json(customer);
     });
     
     router.post("/test", async (req, res) => {
-      const employee = new User(req.body);
-      await employee.save();
-      res.json(employee);
+      const customer = new User(req.body);
+      await customer.save();
+      res.json(customer);
     });
     
     router.put("/:id", async (req, res) => {

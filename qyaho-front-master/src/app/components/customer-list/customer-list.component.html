@@ -1,7 +1,7 @@
 
     <div>
       <div class="text-right mt-6">
-        <p class="text-success">대기자: {{ employeesQuantity }}</p>
+        <p class="text-success">대기자: {{ customersQuantity }}</p>
       </div>
       <table class="table">
         <thead class="thead-dark">
@@ -13,22 +13,23 @@
             <th scope="col">Delete</th>
           </tr>
         </thead>
+
         <tbody>
-          <tr *ngFor="let employee of employees">
+          <tr *ngFor="let customer of customers">
             <td class="text-center" style="width: 50%;">
-              <h5>{{ employee.name }}</h5>
+              <h5>{{ customer.name }}</h5>
             </td>
             <td class="text-center" style="width: 20%;">
-                <h5>{{ employee.email }}</h5>
+                <h5>{{ customer.email }}</h5>
               </td>
             <td class="text-center" style="width: 20%;">
-              <h5>{{ employee.username }}</h5>
+              <h5>{{ customer.username }}</h5>
             </td>
             <!-- <td class="text-center" style="width: 20%;">
-              <h5>{{ employee.password }}</h5>
+              <h5>{{ customer.password }}</h5>
             </td> -->
             <td class="text-center" style="width: 20%;">
-                <h5>{{ employee.birth }}</h5>
+                <h5>{{ customer.birth }}</h5>
               </td>
 
             <td class="text-center" style="width: 5%;">
