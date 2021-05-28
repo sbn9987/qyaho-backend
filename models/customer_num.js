@@ -7,19 +7,6 @@ const CusNumSchema = mongoose.Schema({
     name: {
       type: String
     },
-    email: {
-      type: String,
-      required: true,
-      unique:1
-    },
-    username: {
-      type: String,
-      required: true
-    },
-    password: {
-      type: String,
-      required: true
-    },
     birth : {
       type: String,
       required: true

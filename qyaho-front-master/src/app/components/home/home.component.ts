@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
-
+import Swal from "sweetalert2";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,9 +21,10 @@ export class HomeComponent implements OnInit {
 
   onLogoutClick() {
     this.authService.logout();
-    this.flashMessage.show('로그아웃 되었습니다', {
-      cssClass: 'alert-success',
-      timeout: 3000
+    Swal.fire({
+      title: "로그아웃 성공! ",
+      icon: "success",
+      confirmButtonText: "확인",
     });
     this.router.navigate(['/login']);
     return false;

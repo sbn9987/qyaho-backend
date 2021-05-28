@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
-
+import Swal from "sweetalert2";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -30,11 +30,18 @@ export class LoginComponent implements OnInit {
     this.authService.authenticateUser(login).subscribe(data => {
       if(data.success) {
         this.authService.storeUserData(data.token, data.userNoPW);
-        this.flashMessage.show('환영합니다!',
-          {cssClass: 'alert-success', timeout: 5000});
+        Swal.fire({
+          title: "로그인 성공! ",
+          icon: "success",
+          confirmButtonText: "확인",
+        });
         this.router.navigate(['']);
       } else {
-        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 5000});
+        Swal.fire({
+          title: "로그인 실패! ",
+          icon: "error",
+          confirmButtonText: "확인",
+        });
         this.router.navigate(['login']);
       }
     });

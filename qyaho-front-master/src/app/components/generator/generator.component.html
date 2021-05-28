@@ -1,9 +1,61 @@
 <div style="text-align:center">
   <h1>기능 추가 예정</h1>
-    <ngx-qrcode 
-      [elementType]="elementType" 
-      [value]="qr"
-      cssClass="aclass"
-      errorCorrectionLevel="L">
-    </ngx-qrcode>
-   
+    
+    <div class="container">
+      <div class="card mt-5">
+        <div class="card-title text-center">
+          <h3 class="bg-info p-3 text-white">
+            대기 순번 등록
+          </h3>
+        </div>
+        <div class="card-body">
+          <form
+            [formGroup]="customerForm"
+            (ngSubmit)="manageSubmit(customerForm.value)"
+            class="form-group"
+          >
+            <input
+              class="form-control mt-2"
+              type="text"
+              placeholder="이름을 입력해주세요"
+              name="name"
+              formControlName="name"
+            />
+            <span
+              *ngIf="
+              customerForm.get('name').hasError('required') &&
+              customerForm.get('name').touched
+              "
+              class="text-danger"
+            >
+              이름을 입력해주세요!!
+            </span>
+            <input
+              class="form-control mt-2"
+              type="date"
+              placeholder="이름을 입력해주세요"
+              name="birth"
+              formControlName="birth"
+            />
+            <span
+              *ngIf="
+              customerForm.get('birth').hasError('required') &&
+              customerForm.get('birth').touched
+              "
+              class="text-danger"
+            >
+            <!-- 생일  -->
+              생년 월일을 입력해주세요!!
+            </span>
+
+            <br>
+            <button
+              [disabled]="customerForm.invalid"
+              type="submit"
+              class="btn btn-primary btn-lg mt-2"
+            >
+             대기 등록!
+            </button>
+          </form>
+        </div>
+      </div>

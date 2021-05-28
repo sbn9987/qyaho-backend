@@ -6,7 +6,7 @@ const httpOptions = {
     'Content-Type': 'application/json'
   })
 };
-
+//대기 순번
 @Injectable({
   providedIn: "root",
 })

@@ -6,7 +6,7 @@ const httpOptions = {
     'Content-Type': 'application/json'
   })
 };
-
+//회원 목록
 @Injectable({
   providedIn: "root",
 })
