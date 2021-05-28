@@ -20,11 +20,22 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import {NgQrScannerModule } from 'angular2-qrscanner';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { JwtModule } from '@auth0/angular-jwt';
-
+import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 import { CustomerListComponent } from './components/customer-list/customer-list.component';
 import { CustomerNumComponent } from './components/customer-num/customer-num.component';
 
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogComponent } from './components/dialog/dialog.component';
+
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+  
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +47,7 @@ import { CustomerNumComponent } from './components/customer-num/customer-num.com
     QrscanComponent,
     CustomerListComponent,
     CustomerNumComponent,
+    DialogComponent,
    
     
   ],
@@ -49,14 +61,20 @@ import { CustomerNumComponent } from './components/customer-num/customer-num.com
     NgxQRCodeModule,
     NgQrScannerModule,
     TooltipModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule,   
+     MatIconModule,
+    MatDialogModule,
+    MatButtonModule,
+    BrowserAnimationsModule,
+  
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
           return localStorage.getItem('id_token');
         }
       }
-    })
+    }),
+    NgxMaskModule.forRoot(maskConfig),
   ],
   providers: [ValidateService, AuthService, FlashMessagesService],
   bootstrap: [AppComponent]

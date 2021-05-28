@@ -48,14 +48,13 @@ export class RegisterComponent implements OnInit {
       }
 
     
-    if(!this.validateService.validateRegister(user)){
-      this.flashMessage.show('모두 입력해 주세요',    
+    if(!this.validateService.validateRegister(user)){   
       Swal.fire({
         title: "회원가입 실패! ",
         text:"모두 입력해 주세요",
         icon: "error",
         confirmButtonText: "확인",
-      }));
+      });
       return false;
     }
 

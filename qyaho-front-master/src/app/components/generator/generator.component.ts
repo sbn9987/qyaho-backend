@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from "@angular
 })
 export class GeneratorComponent implements OnInit {
   
-
+ 
   //--대기 순번 등록(텍스트)
   customers: Cus_num[] = [];
   customerForm: FormGroup;

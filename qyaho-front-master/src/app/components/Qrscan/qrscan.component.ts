@@ -1,66 +1,108 @@
-import {Component, ViewChild, ViewEncapsulation, OnInit} from '@angular/core';
-import {QrScannerComponent} from 'angular2-qrscanner';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-
-const httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'charset':"utf-8"
-    })
-  }; 
-
-
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
+import jsQR, { QRCode } from 'jsqr';
 @Component({
-    selector: 'app-qrscan',
-    templateUrl: './qrscan.component.html',
-    styleUrls: ['./qrscan.component.css'],
-    encapsulation: ViewEncapsulation.None,
+  selector: 'app-qrscan',
+  templateUrl: './qrscan.component.html',
+  styleUrls: ['./qrscan.component.css']
 })
-export class QrscanComponent implements OnInit {
-    title(title: any) {
-      throw new Error('Method not implemented.');
-    }
- 
- 
-    @ViewChild(QrScannerComponent) qrScannerComponent!: QrScannerComponent ;
- 
-    ngOnInit() {
+export class QrscanComponent {
 
-    }
+  @ViewChild('video') videoElement: ElementRef | undefined;
+  @ViewChild('canvas') canvasElement: ElementRef | undefined;
 
-    ngAfterViewInit(): void {
-        this.qrScannerComponent.getMediaDevices().then(devices => {
-            console.log(devices);
-            const videoDevices: MediaDeviceInfo[] = [];
-            for (const device of devices) {
-                if (device.kind.toString() === 'videoinput') {
-                    videoDevices.push(device);
-                }
-            }
-            if (videoDevices.length > 0){
-                let choosenDev;
-                for (const dev of videoDevices){
-                    if (dev.label.includes('front')){
-                        choosenDev = dev;
-                        break;
-                    }
-                }
-                if (choosenDev) {
-                    this.qrScannerComponent.chooseCamera.next(choosenDev);
-                } else {
-                    this.qrScannerComponent.chooseCamera.next(videoDevices[0]);
-                }
-            }
+  stream: MediaStream | undefined;
+
+  constructor(
+    public dialog: MatDialog,
+  ) {
+  }
+
+  toggleVideoMedia(): void {
+    if (this.isActive()) {
+      this.stopVideo();
+    } else {
+      this.startVideo();
+    }
+  }
+
+  startVideo(): void {
+    navigator.mediaDevices.enumerateDevices()
+      .then(mediaDeviceInfoList => {
+        console.log(mediaDeviceInfoList);
+        const videoDevices = mediaDeviceInfoList.filter(deviceInfo => deviceInfo.kind === 'videoinput');
+        if (videoDevices.length === 0) {
+          throw new Error('no video input devices');
+        }
+        return navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            deviceId: videoDevices[ 0 ].deviceId,
+            autoGainControl: true,
+            width: 960,
+            height: 640,
+          },
         });
- 
-        this.qrScannerComponent.capturedQr.subscribe(result => {
-           
-            console.log(JSON.stringify({ result }));
+      })
+      .then(mediaStream => {
+        this.stream = mediaStream;
+        if (this.videoElement) {
+          this.videoElement.nativeElement.srcObject = mediaStream;
+          this.processImage();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
 
-        });
-    
-
-    
+  stopVideo(): void {
+    if (this.stream) {
+      this.stream.getVideoTracks()[ 0 ].stop();
     }
+  }
+
+  isActive(): boolean {
+    return this.stream !== undefined && this.stream.active;
+  }
+
+  processImage(): void {
+    if (this.videoElement && this.canvasElement && this.isActive()) {
+
+      const width = this.canvasElement.nativeElement.width;
+      const height = this.canvasElement.nativeElement.height;
+
+      const context = this.canvasElement.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+
+      context.drawImage(this.videoElement.nativeElement, 0, 0, width, height);
+
+      const imageData = context.getImageData(0, 0, width, height);
+      // console.log(imageData);
+
+      const qrcode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'dontInvert' });
+      // console.log(qrcode);
+
+      if (qrcode && qrcode.data.length !== 0) {
+        this.openDialog(qrcode);
+      } else {
+        setTimeout(() => {
+          this.processImage();
+        }, 100);
+      }
+    }
+  }
+
+  openDialog(qrcode: QRCode): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: { qrcode: qrcode },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (this.isActive()) {
+        this.processImage();
+      }
+    });
+  }
 }
+

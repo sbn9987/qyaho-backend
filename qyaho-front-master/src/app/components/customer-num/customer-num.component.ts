@@ -8,8 +8,12 @@ import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from "@angular
   templateUrl: './customer-num.component.html',
   styleUrls: ['./customer-num.component.scss']
 })
+
 export class CustomerNumComponent implements OnInit {
 
+
+
+  
   customers: Cus_num[] = [];
   customerForm: FormGroup;
   selectedCustomer: Cus_num = new Cus_num();
@@ -26,4 +30,6 @@ export class CustomerNumComponent implements OnInit {
 
     this.selectedCustomer = new Cus_num();
   }
+
+  
 }
