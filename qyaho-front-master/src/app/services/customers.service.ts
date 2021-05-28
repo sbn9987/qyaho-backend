@@ -11,7 +11,7 @@ const httpOptions = {
   providedIn: "root",
 })
 export class CustomersService {
-  API_URL: string = "http://localhost:3000/users/test/";
+  API_URL: string = "http://localhost:3000/users/customer_list/";
 
   constructor(private http: HttpClient) {}
 
