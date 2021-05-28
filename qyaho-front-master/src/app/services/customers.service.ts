@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from "../models/user";
+import { User } from "../models/User";
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -11,7 +11,7 @@ const httpOptions = {
   providedIn: "root",
 })
 export class CustomersService {
-  API_URL: string = "http://localhost:3000/users/customer_list/";
+  API_URL: string = "http://localhost:3000/users/cus_list/";
 
   constructor(private http: HttpClient) {}
 

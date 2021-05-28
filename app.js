@@ -13,6 +13,7 @@ const app= express();
 //라우팅
 const users =require('./routes/users')
 const customers = require('./routes/users')
+const cusnum = require('./routes/cusnum')
 //cors
 app.use(cors());
 //static파일을 저장할 폴더 지정
@@ -29,6 +30,7 @@ require('./config/passport')(passport);
 //users 경로 등록
 app.use('/users',users);
 app.use("/customers", customers);
+app.use('/cusnum', cusnum);
 const port =3000;
 
 //mongoDB 연결부

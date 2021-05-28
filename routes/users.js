@@ -88,7 +88,7 @@ router.get('/list', (req, res, next) => {
         res.json(users);
       });
     });
-    router.get("/test", async (req, res) => {
+    router.get("/cus_list", async (req, res) => {
       const customer = await User.find();
       res.json(customer);
     });
@@ -98,7 +98,7 @@ router.get('/list', (req, res, next) => {
       res.json(customer);
     });
     
-    router.post("/test", async (req, res) => {
+    router.post("/cus_list", async (req, res) => {
       const customer = new User(req.body);
       await customer.save();
       res.json(customer);
@@ -118,7 +118,7 @@ router.get('/list', (req, res, next) => {
       });
     });
     
-    router.delete("/test/:id", async (req, res) => {
+    router.delete("/cus_list/:id", async (req, res) => {
       await User.findByIdAndDelete(req.params.id);
       res.json({
         message: "ok",
